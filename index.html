@@ -250,8 +250,17 @@
             font-weight: bold; opacity: 0; pointer-events: none; transition: all 0.3s ease; z-index: 2000;
         }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
+#letters-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
         @media(max-width: 768px) {
+            #letters-container {
+    flex-direction: row;
+    width: auto;
+}
             h1 { font-size: 2.2rem; }
             .main-container { flex-direction: column; padding: 1rem; }
             .sidebar { 
@@ -294,7 +303,7 @@
             </button>
             <div class="divider"></div>
             <button class="letter-btn active" id="btn-all" onclick="showAll()">●</button>
-            <div id="letters-container" style="display:flex; flex-direction:column; gap:0.5rem; width:100%;"></div>
+            <div id="letters-container"></div>
         </aside>
 
         <!-- GRID -->
