@@ -553,10 +553,12 @@
             }
         });
 
-        // --- BUSCADOR ---
+      // --- BUSCADOR ---
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const val = e.target.value.toLowerCase();
-            resetButtons(); // Quitamos selección visual del sidebar
+            
+            // Apagamos los botones laterales SIN borrar lo que estás escribiendo
+            document.querySelectorAll('.letter-btn').forEach(b => b.classList.remove('active'));
             
             const filtered = dictionary.filter(item => 
                 item.t.toLowerCase().includes(val) || item.d.toLowerCase().includes(val)
