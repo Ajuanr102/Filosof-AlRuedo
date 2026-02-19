@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filosofía al Ruedo | Diccionario</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Outfit:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome (Iconos para el corazón) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- VARIABLES & TEMA --- */
+        :root {
+            --primary-sand: #E8DCC5;
+            --primary-gold: #C6A664;
+            --bg-dark: #121418;
+            --bg-card-dark: rgba(22, 25, 30, 0.7);
+            --text-light: #F0F0F0;
+            --text-muted: #9CA3AF;
+            --accent: #4FD1C5;
+            --heart-color: #ef4444;
+            
+            --bg-body: var(--bg-dark);
+            --card-bg: var(--bg-card-dark);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: var(--text-light);
+            --text-sec: var(--text-muted);
+            
+            --font-head: 'Cinzel', serif;
+            --font-body: 'Outfit', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+        }
+
+        body.light-mode {
+            --bg-body: #F5F2EB;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(140, 94, 60, 0.15);
+            --text-main: #2C2420;
+            --text-sec: #5D5550;
+            --accent: #2C7A7B;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+        
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            transition: background-color 0.5s ease;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 10% 20%, rgba(79, 209, 197, 0.05) 0%, transparent 40%);
+            min-height: 100vh;
+        }
+
+        /* --- HEADER --- */
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 3rem 1rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .controls {
+            position: absolute;
+            top: 20px; right: 20px;
+            display: flex; gap: 10px;
+        }
+
+        .btn-icon {
+            background: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: grid; place-items: center;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        .btn-icon:hover { background: var(--accent); color: #fff; transform: scale(1.1); border-color: transparent; }
+
+        .logo-wrap {
+            width: 140px; height: 140px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-gold);
+            padding: 5px; margin-bottom: 1.5rem;
+            background: var(--bg-body);
+            box-shadow: 0 0 40px rgba(198, 166, 100, 0.2);
+            transition: transform 0.5s ease;
+            overflow: hidden;
+        }
+        .logo-wrap:hover { transform: rotate(5deg); }
+
+        .logo-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+        h1 {
+            font-family: var(--font-head); font-size: 3.5rem;
+            background: linear-gradient(135deg, var(--text-main) 0%, var(--primary-gold) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem; line-height: 1.1;
+        }
+
+        .subtitle {
+            font-family: var(--font-body); color: var(--accent);
+            letter-spacing: 3px; text-transform: uppercase;
+            font-size: 0.85rem; font-weight: 600; margin-bottom: 2.5rem;
+        }
+
+        /* --- BÚSQUEDA --- */
+        .search-container {
+            position: relative; width: 100%; max-width: 600px; margin-bottom: 2rem; z-index: 10;
+        }
+        .search-input {
+            width: 100%; padding: 1.2rem 3.5rem 1.2rem 1.5rem;
+            border-radius: 50px; border: 1px solid var(--card-border);
+            background: var(--card-bg); backdrop-filter: blur(12px);
+            color: var(--text-main); font-family: var(--font-body); font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        .search-input:focus { border-color: var(--accent); box-shadow: 0 15px 30px -5px rgba(79, 209, 197, 0.2); }
+        .search-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--text-sec); font-size: 1.2rem; }
+
+        /* --- LAYOUT --- */
+        .main-container {
+            max-width: 1400px; margin: 0 auto; padding: 0 2rem 4rem;
+            display: flex; gap: 2.5rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 60px; position: sticky; top: 2rem;
+            height: fit-content; max-height: 85vh;
+            overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem;
+            scrollbar-width: none;
+        }
+        .sidebar::-webkit-scrollbar { display: none; }
+
+        .letter-btn {
+            border: none; background: transparent; color: var(--text-sec);
+            font-family: var(--font-body); font-weight: 600; padding: 8px 0;
+            cursor: pointer; transition: all 0.2s; border-radius: 6px;
+        }
+        .letter-btn:hover, .letter-btn.active {
+            color: var(--accent); background: rgba(79, 209, 197, 0.1); transform: translateX(5px);
+        }
+
+        /* Botón Favoritos Específico */
+        #btn-favs {
+            color: var(--heart-color);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        #btn-favs.active, #btn-favs:hover {
+            background: var(--heart-color); color: white;
+        }
+
+        .divider { width: 80%; height: 1px; background: var(--card-border); margin: 5px auto; }
+
+        /* Grid */
+        .grid {
+            flex-grow: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem; align-content: start;
+        }
+
+        /* --- TARJETAS --- */
+        .card {
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 16px; padding: 1.5rem;
+            display: flex; flex-direction: column; position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px); cursor: pointer; overflow: hidden;
+        }
+        .card:hover { transform: translateY(-8px); border-color: rgba(198, 166, 100, 0.3); }
+
+        .card-header {
+            display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;
+        }
+
+        .card-term {
+            font-family: var(--font-head); font-size: 1.6rem; color: var(--text-main);
+            width: 85%;
+        }
+
+        /* Corazón */
+        .fav-wrapper {
+            width: 30px; height: 30px; display: grid; place-items: center; z-index: 5;
+        }
+        .fav-icon {
+            font-size: 1.4rem; color: var(--text-sec); transition: all 0.2s;
+        }
+        .fav-icon:hover { transform: scale(1.2); }
+        .fav-icon.active { color: var(--heart-color); }
+        
+        .card-def {
+            font-size: 0.95rem; color: var(--text-sec); line-height: 1.6;
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+            overflow: hidden; margin-bottom: 1rem;
+        }
+
+        .card-tag {
+            margin-top: auto; align-self: flex-start; font-size: 0.75rem;
+            text-transform: uppercase; letter-spacing: 1px; color: var(--primary-gold); font-weight: 700;
+        }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px);
+            z-index: 1000; display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+        .modal {
+            background: var(--bg-body); width: 90%; max-width: 700px;
+            border-radius: 20px; border: 1px solid var(--primary-gold); padding: 3rem;
+            position: relative; transform: scale(0.9); transition: transform 0.3s;
+        }
+        .modal-overlay.active .modal { transform: scale(1); }
+
+        .close-modal {
+            position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.5rem;
+            color: var(--text-sec); cursor: pointer;
+        }
+        .modal-title {
+            font-family: var(--font-head); font-size: 3rem; color: var(--primary-gold);
+            margin-bottom: 1.5rem; border-bottom: 1px solid var(--card-border); padding-bottom: 1rem;
+        }
+        .modal-quote {
+            background: rgba(198, 166, 100, 0.1); padding: 1.5rem; border-left: 4px solid var(--primary-gold);
+            border-radius: 4px; margin-top: 2rem;
+        }
+        .btn-action {
+            padding: 10px 20px; border-radius: 8px; border: 1px solid var(--primary-gold);
+            background: transparent; color: var(--primary-gold); cursor: pointer;
+            font-weight: 600; display: flex; align-items: center; gap: 8px;
+        }
+        .btn-action:hover { background: var(--primary-gold); color: var(--bg-body); }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
+            background: var(--primary-gold); color: #000; padding: 10px 25px; border-radius: 50px;
+            font-weight: bold; opacity: 0; pointer-events: none; transition: all 0.3s ease; z-index: 2000;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        @media(max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .main-container { flex-direction: column; padding: 1rem; }
+            .sidebar { 
+                flex-direction: row; width: 100%; height: auto; 
+                overflow-x: auto; padding-bottom: 10px; top: 0;
+                background: var(--bg-body); z-index: 9; border-bottom: 1px solid var(--card-border);
+            }
+            .modal { padding: 1.5rem; }
+            .modal-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="controls">
+            <button class="btn-icon" onclick="randomTerm()" title="Aleatorio"><i class="fa-solid fa-shuffle"></i></button>
+            <button class="btn-icon" id="themeToggle" title="Tema"><i class="fa-solid fa-moon"></i></button>
+        </div>
+
+        <div class="logo-wrap">
+            <img src="https://scontent.ftgu3-3.fna.fbcdn.net/v/t39.30808-6/536276713_1096399616000647_1828249317596950461_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_aid=0&_nc_ohc=aEP1FBON3-cQ7kNvwESdCMG&_nc_oc=Adn-qb_Cn_CtlV9eAbPY9zSQQ1TNaqtBQCOlTrSTDVC2PFGZf1HuBAhWEKMCKR_GHoo-v-4VOCTJIlOKNC11Re1X&_nc_zt=23&_nc_ht=scontent.ftgu3-3.fna&_nc_gid=nJtFkmlg9q-X_NTwX_1o7w&oh=00_AfiEAbpmGEJuvXFy4NuA0Nh37X79l6s_r5CwR4jmQ1yxcA&oe=692D4923" 
+                 alt="Logo" class="logo-img">
+        </div>
+
+        <h1>Filosofía al Ruedo</h1>
+        <p class="subtitle">Diccionario Esencial</p>
+
+        <div class="search-container">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="Buscar concepto o definición...">
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <button class="letter-btn" id="btn-favs" title="Mis Favoritos" onclick="showFavorites()">
+                <i class="fa-solid fa-heart"></i>
+            </button>
+            <div class="divider"></div>
+            <button class="letter-btn active" id="btn-all" onclick="showAll()">●</button>
+            <div id="letters-container" style="display:flex; flex-direction:column; gap:0.5rem; width:100%;"></div>
+        </aside>
+
+        <!-- GRID -->
+        <main class="grid" id="grid"></main>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <i class="fa-solid fa-xmark close-modal" id="closeModal"></i>
+            <h2 class="modal-title" id="mTitle">Título</h2>
+            <div id="mBody" style="font-size:1.2rem; line-height:1.8;"></div>
+            <div class="modal-footer" style="margin-top:2rem;">
+                <button class="btn-action" onclick="copyDef()"><i class="fa-regular fa-copy"></i> Copiar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toastMsg">Acción realizada</div>
+
+    <script>
+        // --- BASE DE DATOS COMPLETA ---
+        const dictionary = [
+            // A
+            { t: "Absoluto", d: "Lo que existe por sí mismo, incondicionado e independiente. En Hegel, es el Espíritu que se conoce a sí mismo a través de la historia.", q: "Lo verdadero es el todo.", author: "G.W.F. Hegel" },
+            { t: "Abstracción", d: "Proceso mental de separar una cualidad o característica de un objeto para considerarla aisladamente." },
+            { t: "Agnosticismo", d: "Postura que afirma que es imposible conocer la naturaleza o existencia de Dios o lo sobrenatural.", q: "Simplemente no sé.", author: "T.H. Huxley" },
+            { t: "Alienación", d: "Extrañamiento del sujeto. En Marx, la pérdida del ser del trabajador en el producto de su trabajo. En Sartre, la objetivación por la mirada del otro." },
+            { t: "Alma", d: "Principio vital inmaterial. Para Platón es inmortal y prisionera del cuerpo; para Aristóteles es la forma del cuerpo." },
+            { t: "Analítica", d: "Rama de la filosofía que enfatiza la claridad lógica y el análisis del lenguaje (Russell, Wittgenstein)." },
+            { t: "Apeiron", d: "Lo ilimitado, indefinido o infinito. El principio primordial (arché) propuesto por Anaximandro." },
+            { t: "A priori", d: "Conocimiento independiente de la experiencia. Necesario y universal (ej: matemáticas) según Kant." },
+            { t: "Areté", d: "Término griego para virtud o excelencia. El cumplimiento pleno del propósito o función de algo o alguien.", q: "La virtud es un hábito.", author: "Aristóteles" },
+            { t: "Ataraxia", d: "Estado de ánimo caracterizado por la tranquilidad y la ausencia de miedos y preocupaciones. Ideal estoico y epicúreo." },
+            
+            // B
+            { t: "Banalidad del mal", d: "Concepto de Hannah Arendt. El mal no siempre es demoníaco, sino fruto de la burocracia y la falta de reflexión crítica.", q: "El triste privilegio de los nazis no fue ser monstruos, sino hombres comunes.", author: "H. Arendt" },
+            { t: "Belleza", d: "Manifestación sensible de la Idea (Platón) o placer desinteresado (Kant). Categoría central de la estética." },
+            { t: "Bien común", d: "El conjunto de condiciones de la vida social que permiten a los grupos y a los individuos alcanzar su propia perfección." },
+            { t: "Bioética", d: "Rama de la ética dedicada a proveer los principios para la conducta más adecuada respecto a la vida humana y no humana." },
+            { t: "Biopolítica", d: "Concepto de Foucault sobre cómo el poder moderno gestiona la vida biológica de la población (salud, natalidad, higiene)." },
+            
+            // C
+            { t: "Categoría", d: "Concepto fundamental. Aristóteles definió 10 (sustancia, cantidad, etc.). Kant las definió como estructuras a priori del entendimiento." },
+            { t: "Caverna (Mito)", d: "Alegoría de Platón sobre la educación y la ignorancia. Las sombras son las apariencias; la luz exterior es la Verdad." },
+            { t: "Certeza", d: "Estado subjetivo de seguridad respecto a una verdad. Descartes buscó la certeza absoluta mediante la duda metódica." },
+            { t: "Cinismo", d: "Escuela socrática (Diógenes) que despreciaba las convenciones sociales y abogaba por una vida natural y autárquica." },
+            { t: "Cogito", d: "'Cogito, ergo sum' (Pienso, luego existo). El primer principio indudable de la filosofía de Descartes.", q: "Cogito, ergo sum.", author: "Descartes" },
+            { t: "Conciencia", d: "Facultad de reconocerse a sí mismo y al mundo. En fenomenología, la conciencia siempre es intencional ('conciencia de algo')." },
+            { t: "Contrato Social", d: "Teoría política (Hobbes, Locke, Rousseau) que explica el origen del Estado mediante un acuerdo voluntario entre individuos." },
+
+            // D
+            { t: "Dasein", d: "Término de Heidegger ('Ser-ahí'). Se refiere a la existencia humana caracterizada por ser consciente de su propia finitud." },
+            { t: "Deconstrucción", d: "Estrategia de análisis (Derrida) que busca desmontar las jerarquías y oposiciones binarias de los textos filosóficos.", q: "No hay nada fuera del texto.", author: "J. Derrida" },
+            { t: "Deducción", d: "Razonamiento que va de lo general a lo particular. Si las premisas son verdaderas, la conclusión es necesariamente verdadera." },
+            { t: "Deísmo", d: "Creencia en un Dios creador basada en la razón, pero que rechaza la revelación divina y la intervención directa de Dios." },
+            { t: "Determinismo", d: "Doctrina según la cual todos los eventos están causados inevitablemente por eventos previos. Cuestiona el libre albedrío." },
+            { t: "Dialéctica", d: "Arte del diálogo (Platón). En Hegel y Marx, es el proceso de cambio a través del conflicto de opuestos (Tesis-Antítesis-Síntesis)." },
+            { t: "Dogmatismo", d: "Actitud epistemológica que confía en la capacidad de la razón para conocer la verdad absoluta sin crítica previa." },
+            { t: "Duda metódica", d: "Método cartesiano que consiste en cuestionar todo conocimiento hasta encontrar una verdad evidente." },
+
+            // E
+            { t: "Empirismo", d: "Teoría que afirma que todo conocimiento proviene de la experiencia sensorial (Locke, Hume).", q: "La mente es una tabula rasa.", author: "John Locke" },
+            { t: "Enajenación", d: "Ver 'Alienación'. Proceso por el cual el ser humano pierde el control sobre sus propias creaciones." },
+            { t: "Ente", d: "Aquello que es, que existe. Todo objeto, cosa o ser que tiene 'ser'." },
+            { t: "Epistemología", d: "Rama de la filosofía que estudia la naturaleza, origen y límites del conocimiento humano." },
+            { t: "Escepticismo", d: "Doctrina que duda de la capacidad humana para alcanzar la verdad absoluta o certeza." },
+            { t: "Escolástica", d: "Filosofía medieval que intentó conciliar la fe cristiana con la razón aristotélica (Tomás de Aquino)." },
+            { t: "Esencia", d: "Lo que hace que una cosa sea lo que es; su naturaleza fundamental, opuesta a la existencia o al accidente." },
+            { t: "Estética", d: "Rama filosófica que estudia la belleza, el arte y la percepción sensorial." },
+            { t: "Ética", d: "Estudio de la moral, el deber, la felicidad y el buen vivir. ¿Qué debo hacer?" },
+            { t: "Eudaimonía", d: "Felicidad o plenitud. El fin último de la vida humana según la ética aristotélica." },
+            { t: "Existencialismo", d: "Corriente que enfatiza la libertad individual, la responsabilidad y la subjetividad. 'La existencia precede a la esencia'.", q: "El hombre está condenado a ser libre.", author: "Sartre" },
+
+            // F - I
+            { t: "Falacia", d: "Argumento que parece válido pero no lo es. Puede ser intencional (sofisma) o un error de razonamiento." },
+            { t: "Fenomenología", d: "Método (Husserl) que describe las estructuras de la experiencia tal como se presentan a la conciencia." },
+            { t: "Finitud", d: "La condición de ser limitado, temporal y mortal. Concepto central en el existencialismo." },
+            { t: "Genealogía", d: "Método (Nietzsche, Foucault) que investiga el origen histórico de los conceptos para revelar las relaciones de poder ocultas." },
+            { t: "Hedonismo", d: "Doctrina ética que identifica el bien con el placer y la ausencia de dolor (Epicuro)." },
+            { t: "Hermenéutica", d: "Arte y teoría de la interpretación de textos, especialmente sagrados o filosóficos." },
+            { t: "Idealismo", d: "Teoría que afirma la primacía de las ideas o la mente sobre la materia. (Platón, Kant, Hegel)." },
+            { t: "Imperativo Categórico", d: "Ley moral fundamental en Kant: 'Obra sólo según una máxima que puedas querer que se torne ley universal'." },
+            
+            // J - M
+            { t: "Juicio", d: "Acto mental de afirmar o negar algo. Kant distingue entre juicios analíticos y sintéticos." },
+            { t: "Justicia", d: "Dar a cada uno lo suyo. Para Platón, es la armonía de las partes del alma y del Estado." },
+            { t: "Lenguaje (Juegos de)", d: "Concepto de Wittgenstein. El significado de las palabras está en su uso dentro de un contexto social." },
+            { t: "Libertad", d: "Capacidad de autodeterminación. Negativa (libre de coacción) o positiva (autonomía)." },
+            { t: "Lógica", d: "Ciencia de las leyes del pensamiento y del razonamiento válido." },
+            { t: "Materialismo", d: "Doctrina que afirma que todo lo que existe es materia o depende de ella (Demócrito, Marx)." },
+            { t: "Metafísica", d: "Rama que estudia los primeros principios y las causas últimas. Lo que está 'más allá de la física'." },
+            { t: "Mónada", d: "Sustancia simple, indivisible y psíquica que compone el universo según Leibniz." },
+
+            // N - Z
+            { t: "Nada", d: "La negación del ser. En Heidegger, la angustia revela la nada. En Sartre, la conciencia es una nada que busca ser." },
+            { t: "Nihilismo", d: "Negación de todo valor, sentido o verdad objetiva. Nietzsche diagnostica la 'muerte de Dios' como su causa.", q: "Dios ha muerto.", author: "Nietzsche" },
+            { t: "Noúmeno", d: "La 'cosa en sí' (Kant). La realidad tal como es independientemente de nuestra percepción. Inaccesible al conocimiento." },
+            { t: "Ontología", d: "Estudio del ser en cuanto ser. ¿Qué significa existir? ¿Qué categorías de existencia hay?" },
+            { t: "Panteísmo", d: "Creencia de que Dios y el Universo son idénticos (Spinoza: 'Deus sive Natura')." },
+            { t: "Paradigma", d: "Modelo o patrón aceptado por una comunidad científica en un momento dado (Kuhn)." },
+            { t: "Posmodernidad", d: "Condición cultural caracterizada por el fin de los grandes relatos (metarrelatos) y la fragmentación del sentido." },
+            { t: "Pragmatismo", d: "Corriente que valora la verdad de una idea por sus efectos prácticos y su utilidad (James, Dewey)." },
+            { t: "Racionalismo", d: "Confianza en la razón como fuente principal del conocimiento, superior a la experiencia (Descartes, Leibniz)." },
+            { t: "Relativismo", d: "Tesis de que no existen verdades absolutas, sino que dependen del contexto, cultura o individuo." },
+            { t: "Solipsismo", d: "Creencia de que solo uno mismo existe o solo se puede conocer la propia mente." },
+            { t: "Superhombre", d: "El ser que crea sus propios valores y vive más allá del bien y del mal.", q: "El hombre es una cuerda tendida entre la bestia y el superhombre.", author: "Nietzsche" },
+            { t: "Tabula Rasa", d: "La mente como una 'hoja en blanco' al nacer, sin ideas innatas (Locke)." },
+            { t: "Teología", d: "Estudio racional de Dios y las cuestiones religiosas." },
+            { t: "Utilitarismo", d: "Ética que busca 'la mayor felicidad para el mayor número' (Bentham, Mill)." },
+            { t: "Verdad", d: "Adecuación entre el entendimiento y la cosa (Adaequatio) o desocultamiento (Aletheia)." },
+            { t: "Virtud", d: "Hábito operativo bueno que perfecciona al ser humano. Justo medio entre extremos (Aristóteles)." },
+            { t: "Voluntad de Poder", d: "Concepto de Nietzsche. La fuerza impulsora fundamental en los humanos: crecer, expandirse, dominar." }
+        ];
+
+        // Ordenar alfabéticamente
+        dictionary.sort((a, b) => a.t.localeCompare(b.t));
+
+        // --- LÓGICA DE FAVORITOS (Corregida) ---
+        let favorites = JSON.parse(localStorage.getItem('philFavorites')) || [];
+        let currentMode = 'ALL'; 
+
+        // Función para manejar el clic en el corazón
+        function toggleFav(e, term) {
+            e.stopPropagation(); // Evitar abrir modal
+            
+            // Detectar el icono correcto (FontAwesome a veces captura el click en el path interno)
+            let icon = e.target;
+            if (icon.tagName !== 'I') icon = icon.parentElement;
+
+            const index = favorites.indexOf(term);
+
+            if (index === -1) {
+                // GUARDAR: Cambiar a icono sólido y añadir clase activa
+                favorites.push(term);
+                icon.classList.remove('fa-regular');
+                icon.classList.add('fa-solid', 'active');
+                showToast("Guardado en favoritos");
+            } else {
+                // BORRAR: Cambiar a icono regular (borde) y quitar clase activa
+                favorites.splice(index, 1);
+                icon.classList.remove('fa-solid', 'active');
+                icon.classList.add('fa-regular');
+                showToast("Eliminado de favoritos");
+                
+                // Si estamos en la pestaña de favoritos, ocultar la tarjeta dinámicamente
+                if (currentMode === 'FAVS') {
+                    const card = icon.closest('.card');
+                    card.style.display = 'none';
+                }
+            }
+            
+            // Guardar en navegador
+            localStorage.setItem('philFavorites', JSON.stringify(favorites));
+        }
+
+        // --- RENDERIZADO DEL GRID ---
+        const grid = document.getElementById('grid');
+
+        function render(items, isFavMode = false) {
+            grid.innerHTML = "";
+            
+            // Si no hay ítems (vacío)
+            if(items.length === 0) {
+                const msg = isFavMode 
+                    ? "Aún no tienes favoritos guardados.<br>Marca los corazones para verlos aquí."
+                    : "No se encontraron definiciones.";
+                
+                grid.innerHTML = `
+                    <div style="grid-column:1/-1; text-align:center; padding:3rem; color:var(--text-sec);">
+                        <i class="fa-solid ${isFavMode ? 'fa-heart-crack' : 'fa-magnifying-glass'}" style="font-size:3rem; margin-bottom:1rem; opacity:0.5;"></i>
+                        <p>${msg}</p>
+                    </div>`;
+                return;
+            }
+
+            items.forEach((item, index) => {
+                const isFav = favorites.includes(item.t);
+                
+                // Determinar clase del corazón (Sólido si es fav, Regular si no)
+                const heartClass = isFav ? 'fa-solid active' : 'fa-regular';
+                
+                const card = document.createElement('div');
+                card.className = "card";
+                // Animación de entrada
+                card.style.animation = `fadeIn 0.5s ease forwards ${index * 0.05}s`;
+                card.style.opacity = '0'; 
+
+                card.innerHTML = `
+                    <div class="card-header">
+                        <h3 class="card-term">${item.t}</h3>
+                        <div class="fav-wrapper" onclick="toggleFav(event, '${item.t.replace(/'/g, "\\'")}')">
+                            <i class="${heartClass} fa-heart fav-icon"></i>
+                        </div>
+                    </div>
+                    <p class="card-def">${item.d}</p>
+                    <span class="card-tag">Leer más</span>
+                `;
+                
+                card.onclick = () => openModal(item);
+                grid.appendChild(card);
+            });
+        }
+
+        // --- GESTIÓN DE BOTONES LATERALES ---
+        const btnFavs = document.getElementById('btn-favs');
+        const btnAll = document.getElementById('btn-all');
+        const letterContainer = document.getElementById('letters-container');
+
+        function showFavorites() {
+            currentMode = 'FAVS';
+            resetButtons();
+            btnFavs.classList.add('active');
+            const favItems = dictionary.filter(item => favorites.includes(item.t));
+            render(favItems, true);
+        }
+
+        function showAll() {
+            currentMode = 'ALL';
+            resetButtons();
+            btnAll.classList.add('active');
+            render(dictionary);
+        }
+
+        function filterLetter(l, btn) {
+            currentMode = 'LETTER';
+            resetButtons();
+            btn.classList.add('active');
+            const filtered = dictionary.filter(item => item.t.toUpperCase().startsWith(l));
+            render(filtered);
+        }
+
+        function resetButtons() {
+            document.querySelectorAll('.letter-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('searchInput').value = '';
+        }
+
+        // Generar botones A-Z dinámicamente
+        const letters = new Set(dictionary.map(item => item.t.charAt(0).toUpperCase()));
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').forEach(l => {
+            if(letters.has(l)) {
+                const btn = document.createElement('button');
+                btn.className = 'letter-btn';
+                btn.innerText = l;
+                btn.onclick = () => filterLetter(l, btn);
+                letterContainer.appendChild(btn);
+            }
+        });
+
+        // --- BUSCADOR ---
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const val = e.target.value.toLowerCase();
+            resetButtons(); // Quitamos selección visual del sidebar
+            
+            const filtered = dictionary.filter(item => 
+                item.t.toLowerCase().includes(val) || item.d.toLowerCase().includes(val)
+            );
+            render(filtered);
+        });
+
+        // --- MODAL (POPUP) ---
+        const modalOverlay = document.getElementById('modalOverlay');
+        let currentItem = null;
+
+        function openModal(item) {
+            currentItem = item;
+            document.getElementById('mTitle').innerText = item.t;
+            
+            let html = `<p>${item.d}</p>`;
+            // Si tiene cita, mostrarla bonita
+            if(item.q) {
+                html += `
+                    <div class="modal-quote">
+                        <i class="fa-solid fa-quote-left" style="font-size:1.5rem; color:var(--primary-gold); margin-bottom:0.5rem;"></i>
+                        <em style="font-family:var(--font-serif); font-size:1.3rem; display:block; margin:0.5rem 0;">"${item.q}"</em>
+                        <strong style="color:var(--text-sec); font-size:0.9rem; letter-spacing:1px; text-transform:uppercase; float:right;">— ${item.author}</strong>
+                        <div style="clear:both;"></div>
+                    </div>
+                `;
+            }
+            document.getElementById('mBody').innerHTML = html;
+            modalOverlay.classList.add('active');
+        }
+
+        document.getElementById('closeModal').onclick = () => modalOverlay.classList.remove('active');
+        // Cerrar si clic fuera del modal
+        modalOverlay.onclick = (e) => { if(e.target === modalOverlay) modalOverlay.classList.remove('active'); };
+
+        function copyDef() {
+            if(!currentItem) return;
+            // Copiar texto formateado
+            const text = currentItem.q 
+                ? `"${currentItem.q}" - ${currentItem.author} (${currentItem.t})`
+                : `${currentItem.t}: ${currentItem.d}`;
+                
+            navigator.clipboard.writeText(text);
+            showToast("Texto copiado");
+        }
+
+        // --- UTILIDADES ---
+        function randomTerm() {
+            const rand = dictionary[Math.floor(Math.random() * dictionary.length)];
+            openModal(rand);
+        }
+
+        function showToast(txt) {
+            const t = document.getElementById('toastMsg');
+            t.innerText = txt;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        document.getElementById('themeToggle').onclick = () => {
+            document.body.classList.toggle('light-mode');
+        };
+
+        // Estilos extra
+        const style = document.createElement('style');
+        style.innerHTML = `@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }`;
+        document.head.appendChild(style);
+
+        // INICIALIZACIÓN
+        render(dictionary);
+
+    </script>
+</body>
+</html>
